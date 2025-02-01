@@ -88,13 +88,11 @@ function App() {
         <Toaster />
         <QueryClientProvider client={querClient}>
           <ReactQueryDevtools />
-          {/* <BrowserRouter> */}
           <main className="px-[3.5vw]">
             <Wrapper>
               <RouterProvider router={router} />
             </Wrapper>
           </main>
-          {/* </BrowserRouter> */}
         </QueryClientProvider>
       </ProductsContext.Provider>
     </div>
