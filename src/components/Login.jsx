@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { loggedInUser, login } from "../functions";
 import Cookies from "js-cookie";
@@ -26,7 +25,6 @@ function Login() {
       expires: new Date(new Date().getTime() + 15 * 60 * 1000),
     });
   }
-  console.log(tryToLoginTimes);
   return (
     <>
       <form
@@ -40,7 +38,6 @@ function Login() {
             onSuccess: async (data) => {
               Cookies.set("jwt", data?.data?.token, { expires: 3 });
               toast.success("Logged In Successful");
-              console.log(await loggedInUser());
               queryClient.setQueryData(["loggedInUser"], await loggedInUser());
               queryClient.invalidateQueries(["loggedInUser"]);
               reset();

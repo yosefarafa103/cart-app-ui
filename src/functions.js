@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 export const isLoggedIn = !!Cookies.get("jwt");
-export const localHost = `http://localhost:5001`;
+export const localHost = `https://cart-app-api-production.up.railway.app`;
 export const getData = async (dataItems) => {
   const res = await axios.get(`${localHost}/${dataItems}`);
   return res.data;
