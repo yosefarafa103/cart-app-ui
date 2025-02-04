@@ -13,7 +13,7 @@ export default function AddItem({ adminName }) {
     })
     const handelAddNewProduct = async (data) => {
         try {
-            await axios.post('http://localhost:5001/products', data)
+            await axios.post('${localHost}/products', data)
         } catch (err) {
             console.log(err);
         }

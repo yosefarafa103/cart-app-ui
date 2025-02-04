@@ -22,7 +22,7 @@ function Header() {
         localStorage.clear()
         setTimeout(() => navigation("/login"), 1000);
     }
-    console.log(items);
+    console.log(userData);
     const links = ["my-bookings"];
     if (!pathname.includes('/cart')) links.unshift("cart");
     return (
@@ -47,7 +47,7 @@ function Header() {
                 ))}
                 <Link to={`/account`} className="flex items-center gap-2">
                     <FaUser />
-                    <h4>{queryClient.getQueryData('loggedInUser')?.name || userData?.data?.name}</h4>
+                    <h4>{queryClient.getQueryData('loggedInUser')?.name || userData?.name}</h4>
                 </Link>
                 <div onClick={handelLogOut} className="bg-red-400 cursor-pointer hover:bg-red-500  px-4 py-2 font-semibold rounded-md text-white">Logout</div>
             </section>

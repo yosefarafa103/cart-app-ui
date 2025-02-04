@@ -6,10 +6,10 @@ export function usegetAllBookings() {
   const { data, isLoading, error, status } = useQuery({
     queryFn: async () => {
       try {
-        const booking = await axios.get("http://localhost:5001/booking");
+        const booking = await axios.get(`${localHost}/booking`);
         return booking?.data;
       } catch (err) {
-        throw Error(err)
+        throw Error(err);
         console.log(err);
       }
     },

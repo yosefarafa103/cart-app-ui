@@ -5,10 +5,10 @@ import { useState } from "react";
 import ErrorMessages from "./ErrorMessages";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { localHost } from "../functions";
 import toast from "react-hot-toast";
+
 import { updateBookingStatus } from "./services/updateBookingStatus";
+import { AnimatePresence, motion } from "framer-motion";
 export default function ProductItem({
   productName,
   price,
@@ -77,46 +77,52 @@ export default function ProductItem({
           )}
         </div>
       </div>
-      {isEdited && (
-        <form
-          onSubmit={handleSubmit((validData) => {
-            console.log(validData);
-            mutate(validData, {
-              onSuccess: () => {
-                queryClient.invalidateQueries([`booking`]);
-                toast.success("updated booking status. ", validData.status);
-              },
-              onError: (err) => console.log(err),
-            });
-          })}
-        >
-          <select
-            className="w-full p-[10px] outline-0 border-solid border-[2px] border-[#ddd] rounded-md my-[5px]"
-            {...register("status", {
-              required: {
-                value: true,
-                message: "please provide booking status value",
-              },
+      <AnimatePresence mode="popLayout" key={_id}>
+        {isEdited && (
+          <motion.form
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onSubmit={handleSubmit((validData) => {
+              console.log(validData);
+              mutate(validData, {
+                onSuccess: () => {
+                  queryClient.invalidateQueries([`booking`]);
+                  toast.success("updated booking status. ", validData.status);
+                },
+                onError: (err) => console.log(err),
+              });
             })}
           >
-            <>
-              <option value="">please choose value..</option>
-              <option value={"pending"}>pending</option>
-              <option value={"delivered"}>{"delivered"}</option>
-              <option value={"shipped"}>{"shipped"}</option>
-            </>
-          </select>
-          <button
-            // disabled={isPending}
-            className={`p-1.5 rounded-md  bg-blue-400 w-full block mt-1 text-white ${
-              isPending ? "opacity-[0.5] cursor-not-allowed" : ""
-            }`}
-          >
-            {isPending ? "adding comment .." : "Add Comment"}
-          </button>
-          <ErrorMessages message={errors?.status?.message} />
-        </form>
-      )}
+            <select
+              className="w-full p-[10px] outline-0 border-solid border-[2px] border-[#ddd] rounded-md my-[5px]"
+              {...register("status", {
+                required: {
+                  value: true,
+                  message: "please provide booking status value",
+                },
+              })}
+            >
+              <>
+                <option value="">please choose value..</option>
+                <option value={"pending"}>pending</option>
+                <option value={"delivered"}>{"delivered"}</option>
+                <option value={"shipped"}>{"shipped"}</option>
+              </>
+            </select>
+            <button
+              // disabled={isPending}
+              className={`p-1.5 rounded-md  bg-blue-400 w-full block mt-1 text-white ${
+                isPending ? "opacity-[0.5] cursor-not-allowed" : ""
+              }`}
+            >
+              {isPending ? "adding comment .." : "Add Comment"}
+            </button>
+            <ErrorMessages message={errors?.status?.message} />
+          </motion.form>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export default function Wrapper({ children }) {
   const [error, setError] = useState(false);
   (async () => {
     try {
-      await axios.get("http://localhost:5001/products");
+      await axios.get("${localHost}/products");
     } catch (err) {
       if (err.status == 429) {
         setError(true);

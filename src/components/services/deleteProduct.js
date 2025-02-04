@@ -1,9 +1,10 @@
 import axios from "axios";
+import { localHost } from "../../functions";
 export async function deleteProduct(productId) {
   try {
     
     const deleted = await axios.delete(
-      `http://localhost:5001/products/${productId}`
+      `${localHost}/products/${productId}`
     );
     return deleted.data;
   } catch (err) {

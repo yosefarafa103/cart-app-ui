@@ -12,7 +12,6 @@ import Login from "./components/Login";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
-import Cart from "./components/Cart";
 import { createContext, useState } from "react";
 import { productsInCart } from "./functions";
 import AccountPage from "./components/AccountPage";
@@ -22,6 +21,7 @@ import ProductPage from "./components/ProductPage";
 import SignIn from "./components/SignIn";
 import ChangePasswordForm from "./components/ChangePasswordForm";
 import Wrapper from "./components/Wrapper";
+import Cart from "./components/Cart";
 export const ProductsContext = createContext(null);
 
 function App() {
@@ -46,6 +46,7 @@ function App() {
           <AccountPage />
         </AuthPage>
       ),
+      children: [{ path: "change-password", element: <ChangePasswordForm /> }],
     },
     {
       path: "/my-bookings",
@@ -69,11 +70,9 @@ function App() {
         </AuthPage>
       ),
     },
-    {
-      path: "/account/change-password",
-      element: <ChangePasswordForm />,
-    },
+
     { path: "signin", element: <SignIn /> },
+    { path: "cart", element: <Cart /> },
   ]);
   const querClient = new QueryClient({
     defaultOptions: {

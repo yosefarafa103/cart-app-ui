@@ -4,18 +4,18 @@ import { jwtDecode } from "jwt-decode";
 export const isLoggedIn = !!Cookies.get("jwt");
 export const localHost = `http://localhost:5001`;
 export const getData = async (dataItems) => {
-  const res = await axios.get(`http://localhost:5001/${dataItems}`);
+  const res = await axios.get(`${localHost}/${dataItems}`);
   return res.data;
 };
 
 export const productsInCart = JSON.parse(localStorage.getItem("productsCart"));
 export const getItemById = async (dataItems, id) => {
-  const res = await axios.get(`http://localhost:5001/${dataItems}/${id}`);
+  const res = await axios.get(`${localHost}/${dataItems}/${id}`);
   return res.data;
 };
 export const createBooking = async (data) => {
   const loggedUser = await loggedInUser();
-  const res = await axios.post(`http://localhost:5001/booking`, {
+  const res = await axios.post(`${localHost}/booking`, {
     ...data,
     bookedProduct: loggedUser,
   });
@@ -41,7 +41,7 @@ export async function tryFetchQuery(url) {
 
 export const login = async (data) => {
   try {
-    const logUser = await axios.post("http://localhost:5001/users/login", data);
+    const logUser = await axios.post(`${localHost}/users/login`, data);
     // return { status: "success", data: logUser };
     return logUser;
   } catch (err) {
@@ -55,7 +55,7 @@ export const loggedInUser = async () =>
   jwtDecode(Cookies.get("jwt")) ? jwtDecode(Cookies.get("jwt"))?.id : null;
 export const getUserFromToken = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:5001/users/${id}`);
+    const res = await axios.get(`${localHost}/users/${id}`);
     return res.data;
   } catch (err) {
     return new Error(err);
@@ -63,7 +63,7 @@ export const getUserFromToken = async (id) => {
 };
 export async function getBookedItems(id) {
   const { _id } = await getItemById("users", jwtDecode(Cookies.get("jwt"))?.id);
-  const items = await axios.get(`http://localhost:5001/booking/user/${_id}`);
+  const items = await axios.get(`${localHost}/booking/user/${_id}`);
   if (!items) {
     return new Error("err ..");
   }

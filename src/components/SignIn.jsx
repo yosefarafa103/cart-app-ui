@@ -10,7 +10,7 @@ export default function SignIn() {
     });
     const createNewAccount = async (userData) => {
         try {
-            const user = await axios.post(`http://localhost:5001/users`, userData);
+            const user = await axios.post(`${localHost}/users`, userData);
             console.log(user);
         } catch (err) {
             console.log(err);

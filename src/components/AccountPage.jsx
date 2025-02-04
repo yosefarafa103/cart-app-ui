@@ -15,15 +15,11 @@ import AdminArea from "./AdminArea";
 import { differenceInDays } from "date-fns";
 
 export default function AccountPage() {
-  const { data: userData } = useQuery({
-    queryKey: ["loggedInUser"],
-  });
-  // console.log(new Date(userData?.data?.changedPasswordAt).setDate(25));
+  const { data: userData } = useLoggedInUser();
   const hasPermessionToChangePassword = differenceInDays(
-    new Date(),
-    userData?.data?.changedPasswordAt
+    new Date(userData?.changedPasswordAt).getTime() + 864e5 * 5,
+    new Date().getTime()
   );
-  // console.log(userData?.data?.changedPasswordAt);
 
   const queryClient = useQueryClient();
   const { data: bookedProducts } = useGetBookedProducts();
@@ -38,24 +34,20 @@ export default function AccountPage() {
     queryClient.getQueryData(["booked-products"]) || bookedProducts;
   const nvaigate = useNavigate();
   const { data: booking } = usegetAllBookings();
+  console.log(hasPermessionToChangePassword);
 
   return (
     <div className="flex max-sm:flex-col gap-5 relative">
       <div className="flex-1 px-3 mt-3  sm:min-h-[90vh] pb-[3vw] bg-[#f7f7f7]">
-        <div className="size-[100px] pt-2 mt-4 flex flex-col items-center justify-center  mx-auto">
+        <div className="w-[250px] pt-2 mt-4 flex flex-col items-center justify-center  mx-auto">
           <FaUser className="text-[40px] text-[#4444]" />
-          <span className="text-sm mt-3 font-semibold">
-            {userData?.data?.name}
-          </span>
+          <span className="text-sm mt-3 font-semibold">{userData?.name}</span>
         </div>
         <h3 className="border-b-solid mt-5 border-b-[#ddd] border-b-[1px] pb-3">
           Settings
         </h3>
         <section className="mt-3">
-          {(!userData?.data?.changedPasswordAt &&
-            !hasPermessionToChangePassword) ||
-          (hasPermessionToChangePassword >= 5 &&
-            !isConfirmedToChangePassword) ? (
+          {!userData?.changedPasswordAt || hasPermessionToChangePassword < 0 ? (
             <h4
               onClick={() => {
                 if (confirm("Are You Sure To Change Your Password?")) {
@@ -68,13 +60,9 @@ export default function AccountPage() {
               change your password
             </h4>
           ) : (
-            hasPermessionToChangePassword < 5 && (
-              <h3 className="text-white px-4 py-1 rounded-md bg-red-400">
-                You Can Change Your Password After{" "}
-                {new Date(userData?.data?.changedPasswordAt).getDate() +
-                  5 -
-                  new Date().getDate()}{" "}
-                Days{" "}
+            hasPermessionToChangePassword <= 5 && (
+              <h3 className="text-white px-4 py-1 rounded-md bg-red-500 text-center">
+                {`You Can Change Your Password After ${hasPermessionToChangePassword} Days`}
               </h3>
             )
           )}
@@ -104,7 +92,7 @@ export default function AccountPage() {
               </div>
             ))}
           </div>
-          {loggedInUser?.data?.role === "admin" && (
+          {loggedInUser?.role === "admin" && (
             <>
               <AdminArea />
             </>

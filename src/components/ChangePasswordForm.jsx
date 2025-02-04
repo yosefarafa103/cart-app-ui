@@ -6,15 +6,15 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie"
 import { differenceInDays } from "date-fns"
 import { useLoggedInUser } from "../hooks/useLoggedInUser";
+import { localHost } from "../functions";
 export default function ChangePasswordForm() {
     const { register, handleSubmit, formState: { errors }, reset, getValues } = useForm({});
     const { data, mutate, isError, isPending } = useMutation({
-        mutationFn: async (newData) => axios.patch(`http://localhost:5001/users/update-user-password`, newData)
+        mutationFn: async (newData) => axios.patch(`${localHost}/users/update-user-password`, newData)
     });
     // 
     // 
     const hasAccess = Cookies.get("hasAccessToChangePassword");
-    console.log(hasAccess);
     const queryClient = useQueryClient()
     const { data: user } = useLoggedInUser()
     const userCachedData = queryClient.getQueryData(["loggedInUser"]) || user?.data?.email;
